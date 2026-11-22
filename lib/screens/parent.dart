@@ -1,5 +1,6 @@
 // parent.jsx — родительский вход, дашборд и настройки.
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../ds/components.dart';
@@ -152,6 +153,30 @@ class _ParentSettingsState extends State<ParentSettings> {
     });
   }
 
+  Future<void> _showPrivacyPolicy() async {
+    final policy = await rootBundle.loadString('docs/privacy-policy.md');
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Политика конфиденциальности'),
+        scrollable: true,
+        content: SizedBox(
+          width: 600,
+          child: SelectableText(
+            policy.replaceAll(RegExp(r'^## ', multiLine: true), '').trim(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Закрыть'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final h = display(15);
@@ -223,6 +248,13 @@ class _ParentSettingsState extends State<ParentSettings> {
                             LbButton('Сохранить', block: true, onTap: save),
                             const SizedBox(height: 10),
                             LbButton('Сменить возраст', variant: 'ghost', block: true, icon: LucideIcons.baby, onTap: widget.onChangeAge),
+                            const SizedBox(height: 10),
+                            LbButton(
+                              'Политика конфиденциальности',
+                              variant: 'ghost',
+                              block: true,
+                              onTap: _showPrivacyPolicy,
+                            ),
                           ],
                         ),
                       ),

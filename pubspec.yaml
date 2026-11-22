@@ -59,6 +59,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - docs/privacy-policy.md
     - assets/bridge/
     - assets/brand/
     - assets/animals/
